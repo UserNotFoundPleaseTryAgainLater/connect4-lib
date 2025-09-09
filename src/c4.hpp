@@ -62,7 +62,7 @@ namespace c4
                     else if (board[row][column] == 1)
                         std::cout << "\033[1;93m\u25C9\033[0m ";
                     else if (board[row][column] == 0)
-                        std::cout << " ";
+                        std::cout << "  ";
                 }
                 std::cout << std::endl;
             }
@@ -70,20 +70,22 @@ namespace c4
         
         void MakeMove(int column, Color color)
         {
-            int row = 5;
-            while (((board[row][column]) != 0) && (row >= 0)) { --row; }
+            if ((board[0][column - 1]) != 0) return;
+            int row = 0;
+            int boardRepresent = 0;
+            while (((board[row + 1][column - 1]) == 0) && (row < 5)) ++row;
             switch (color)
             {
                 case Color::RED:
-                    int boardRepresent = -1;
+                    boardRepresent = -1;
                     break;
                 case Color::YELLOW:
-                    int boardRepresent = 1;
+                    boardRepresent = 1;
                     break;
 
             }
 
-            board[row][column] = boardRepresent;
+            board[row][column - 1] = boardRepresent;
         }
 
         int GetElement(int row, int column)
@@ -109,6 +111,7 @@ namespace c4
     public:
         void LegalMoves(Board& board)
         {
+            moves.clear();
             for (int column = 0; column < 7; ++column)
             {
                 if ((board.GetElement(0, column)) == 0) moves.push_back(column + 1);
