@@ -83,7 +83,6 @@ namespace c4
                 case Color::YELLOW:
                     boardRepresent = 1;
                     break;
-
             }
 
             board[row][column - 1] = boardRepresent;
