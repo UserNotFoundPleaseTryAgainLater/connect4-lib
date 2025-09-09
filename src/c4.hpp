@@ -5,6 +5,11 @@
 
 namespace c4
 {
+    enum class Color
+    {
+        RED,
+        YELLOW
+    };
     class Board
     {
     private:
@@ -62,6 +67,25 @@ namespace c4
                 std::cout << std::endl;
             }
         }
+        
+        void MakeMove(int column, Color color)
+        {
+            int row = 5;
+            while (((board[row][column]) != 0) && (row >= 0)) { --row; }
+            switch (color)
+            {
+                case Color::RED:
+                    int boardRepresent = -1;
+                    break;
+                case Color::YELLOW:
+                    int boardRepresent = 1;
+                    break;
+
+            }
+
+            board[row][column] = boardRepresent;
+        }
+
         int GetElement(int row, int column)
         {
             return board[row][column];

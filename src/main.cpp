@@ -18,4 +18,6 @@ int main()
     c4::Movelist moves;
     moves.LegalMoves(board);
     moves.show();
+    board.MakeMove(4, Color::RED)
+    board.show();
 }
