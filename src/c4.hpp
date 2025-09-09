@@ -96,7 +96,6 @@ namespace c4
             int row = 0;
             while (((board[row][column - 1]) == 0) && (row < 5)) ++row;
             board[row][column - 1] = 0;
-
         }
 
         int GetElement(int row, int column)
