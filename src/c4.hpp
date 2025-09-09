@@ -62,6 +62,10 @@ namespace c4
                 std::cout << std::endl;
             }
         }
+        int GetElement(int row, int column)
+        {
+            return board[row][column];
+        }
     };
     /*class Move
     {
@@ -81,9 +85,9 @@ namespace c4
     public:
         void LegalMoves(Board& board)
         {
-            for (int column = 0; column < 6; ++column)
+            for (int column = 0; column < 7; ++column)
             {
-                if ((board[0][column]) == 0) moves.push_back(column + 1);
+                if ((board.GetElement(0, column)) == 0) moves.push_back(column + 1);
             }
         }
         void show()
@@ -94,5 +98,5 @@ namespace c4
             }
             std::cout << std::endl;
         }
-    }
+    };
 }
