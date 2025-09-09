@@ -59,8 +59,40 @@ namespace c4
                     else if (board[row][column] == 0)
                         std::cout << " ";
                 }
-                std::cout << "\n";
+                std::cout << std::endl;
             }
         }
     };
+    /*class Move
+    {
+    private:
+        int column
+    public:
+        Move(int move)
+        {
+            if((move >= 1) && (move <= 7)) column = move - 1;
+            else column = 0;
+        }
+    };*/
+    class Movelist
+    {
+    private:
+        std::vector<int> moves;
+    public:
+        std::vector<int> LegalMoves(Board& board)
+        {
+            for (int column = 0; column < 6; ++column)
+            {
+                if ((board[0][column]) == 0) moves.push_back(column + 1);
+            }
+        }
+        void show()
+        {
+            for (const int move : moves)
+            {
+                std::cout << move << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
 }
