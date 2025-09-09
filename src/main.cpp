@@ -18,7 +18,11 @@ int main()
     c4::Movelist moves;
     moves.LegalMoves(board);
     moves.show();
-    for (int i = 0; i < 5; ++i) board.MakeMove(4, c4::Color::RED);
+    board.MakeMove(4, c4::Color::RED); //Drop red chip at column 4
+    board.show();
+    moves.LegalMoves(board);
+    moves.show();
+    board.UnmakeMove(4); //Remove top chip at column 4
     board.show();
     moves.LegalMoves(board);
     moves.show();

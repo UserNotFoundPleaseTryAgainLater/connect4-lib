@@ -89,22 +89,22 @@ namespace c4
             board[row][column - 1] = boardRepresent;
         }
 
+        void UnmakeMove(int column)
+        {
+            if (!((column >= 1) && (column <= 7))) return;
+            if ((board[5][column - 1]) == 0) return;
+            int row = 0;
+            while (((board[row][column - 1]) == 0) && (row < 5)) ++row;
+            board[row][column - 1] = 0;
+
+        }
+
         int GetElement(int row, int column)
         {
             return board[row][column];
         }
     };
-    /*class Move
-    {
-    private:
-        int column
-    public:
-        Move(int move)
-        {
-            if((move >= 1) && (move <= 7)) column = move - 1;
-            else column = 0;
-        }
-    };*/
+
     class Movelist
     {
     private:
