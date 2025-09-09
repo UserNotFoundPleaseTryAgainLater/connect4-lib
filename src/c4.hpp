@@ -71,6 +71,7 @@ namespace c4
         void MakeMove(int column, Color color)
         {
             if ((board[0][column - 1]) != 0) return;
+            if (!(column >= 1) && (column <= 7)) return;
             int row = 0;
             int boardRepresent = 0;
             while (((board[row + 1][column - 1]) == 0) && (row < 5)) ++row;
