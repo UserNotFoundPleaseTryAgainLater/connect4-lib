@@ -50,7 +50,7 @@ namespace c4
                 board = newPos;
         }
         
-        void show()
+        void show() const
         {
             std::cout << "\n";
             for (int row = 0; row < 6; ++row)
@@ -97,7 +97,7 @@ namespace c4
             board[row][column - 1] = 0;
         }
 
-        int GetElement(int row, int column)
+        int GetElement(int row, int column) const
         {
             return board[row][column];
         }
@@ -116,7 +116,7 @@ namespace c4
                 if ((board.GetElement(0, column)) == 0) moves.push_back(column + 1);
             }
         }
-        void show()
+        void show() const
         {
             for (const int move : moves)
             {
