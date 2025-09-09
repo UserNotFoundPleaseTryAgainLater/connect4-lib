@@ -79,7 +79,7 @@ namespace c4
     private:
         std::vector<int> moves;
     public:
-        std::vector<int> LegalMoves(Board& board)
+        void LegalMoves(Board& board)
         {
             for (int column = 0; column < 6; ++column)
             {
