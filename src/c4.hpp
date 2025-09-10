@@ -68,7 +68,7 @@ namespace c4
             }
         }
         
-        void MakeMove(int column, Color color)
+        void makeMove(int column, Color color)
         {
             if ((board[0][column - 1]) != 0) return;
             if (!((column >= 1) && (column <= 7))) return;
@@ -88,7 +88,7 @@ namespace c4
             board[row][column - 1] = boardRepresent;
         }
 
-        void UnmakeMove(int column)
+        void unmakeMove(int column)
         {
             if (!((column >= 1) && (column <= 7))) return;
             if ((board[5][column - 1]) == 0) return;
@@ -97,7 +97,7 @@ namespace c4
             board[row][column - 1] = 0;
         }
 
-        int GetElement(int row, int column) const
+        int getElement(int row, int column) const
         {
             return board[row][column];
         }
@@ -108,12 +108,12 @@ namespace c4
     private:
         std::vector<int> moves;
     public:
-        void LegalMoves(Board& board)
+        void legalMoves(Board& board)
         {
             moves.clear();
             for (int column = 0; column < 7; ++column)
             {
-                if ((board.GetElement(0, column)) == 0) moves.push_back(column + 1);
+                if ((board.getElement(0, column)) == 0) moves.push_back(column + 1);
             }
         }
         void show() const

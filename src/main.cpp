@@ -16,14 +16,14 @@ int main()
     board.set(pos);
     board.show();
     c4::Movelist moves;
-    moves.LegalMoves(board);
+    moves.legalMoves(board);
     moves.show();
-    board.MakeMove(4, c4::Color::RED); //Drop red chip at column 4
+    board.makeMove(4, c4::Color::RED); //Drop red chip at column 4
     board.show();
-    moves.LegalMoves(board);
+    moves.legalMoves(board);
     moves.show();
-    board.UnmakeMove(4); //Remove top chip at column 4
+    board.unmakeMove(4); //Remove top chip at column 4
     board.show();
-    moves.LegalMoves(board);
+    moves.legalMoves(board);
     moves.show();
 }
