@@ -12,25 +12,7 @@ namespace c4
         YELLOW
     };
 
-    void toBits(std::array<std::array<short, 7>, 6>& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
-    {
-        for (int column = 0; column < 7; column++)
-        {
-            for (int row = 0; row < 6; row++)
-            {
-                if ((board.getElement(row, column)) == 1)
-                {
-                    int bitIndex = 6 * column + row;
-                    bitboardYellow.set(bitIndex);
-                }
-                else if ((board.getElement(row, column)) == -1)
-                {
-                    int bitIndex = 6 * column + row;
-                    bitboardRed.set(bitIndex);
-                }
-            }
-        }
-    }
+    void toBits(std::array<std::array<short, 7>, 6>& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed);
 
     class Board
     {
@@ -147,4 +129,23 @@ namespace c4
             std::cout << std::endl;
         }
     };
+    void toBits(const Board& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
+    {
+        for (int column = 0; column < 7; column++)
+        {
+            for (int row = 0; row < 6; row++)
+            {
+                if ((board.getElement(row, column)) == 1)
+                {
+                    int bitIndex = 6 * column + row;
+                    bitsYellow.set(bitIndex);
+                }
+                else if ((board.getElement(row, column)) == -1)
+                {
+                    int bitIndex = 6 * column + row;
+                    bitsRed.set(bitIndex);
+                }
+            }
+        }
+    }
 }
