@@ -12,26 +12,24 @@ namespace c4
         YELLOW
     };
 
-    class Board;
-
     class Bitboard
     {
     private:
         std::bitset<42> bitboardYellow;
         std::bitset<42> bitboardRed;
     public:
-        void toBits(Board board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
+        void toBits(std::array<std::array<short, 7>, 6>& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
         {
             for (int column = 0; column < 7; column++)
             {
                 for (int row = 0; row < 6; row++)
                 {
-                    if ((board.getElement[row][column]) == 1)
+                    if ((board.getElement(row, column)) == 1)
                     {
                         int bitIndex = 6 * column + row;
                         bitboardYellow.set(bitIndex);
                     }
-                    else if ((board.getElement[row][column]) == -1)
+                    else if ((board.getElement(row, column)) == -1)
                     {
                         int bitIndex = 6 * column + row;
                         bitboardRed.set(bitIndex);
@@ -39,7 +37,7 @@ namespace c4
                 }
             }
         }
-    }
+    };
 
     class Board
     {
