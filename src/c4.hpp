@@ -18,6 +18,8 @@ namespace c4
     {
     private:
         std::array<std::array<short, 7>, 6> board{};
+        std::bitset<42> bitboardYellow;
+        std::bitset<42> bitboardRed;
 
         bool isValidPosition(const std::array<std::array<short, 7>, 6>& pos)
         {
@@ -104,6 +106,11 @@ namespace c4
         int getElement(int row, int column) const
         {
             return board[row][column];
+        }
+        
+        bool isFourInRow()
+        {
+            
         }
     };
 
