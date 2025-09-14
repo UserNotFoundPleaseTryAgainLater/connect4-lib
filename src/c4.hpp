@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <bitset>
 
 namespace c4
 {
@@ -10,6 +11,36 @@ namespace c4
         RED,
         YELLOW
     };
+
+    class Board;
+
+    class Bitboard
+    {
+    private:
+        std::bitset<42> bitboardYellow;
+        std::bitset<42> bitboardRed;
+    public:
+        toBits(Board board)
+        {
+            for (int column = 0; column < 7; column++;)
+            {
+                for (int row = 0; row < 6; row++)
+                {
+                    if ((board.getElement[row][column]) == 1)
+                    {
+                        int bitIndex = 7 * row + column;
+                        bitboardYellow.set(bitIndex);
+                    }
+                    else if ((board.getElement[row][column]) == -1)
+                    {
+                        int bitIndex = 7 * row + column;
+                        bitboardRed.set(bitIndex);
+                    }
+                }
+            }
+        }
+    }
+
     class Board
     {
     private:
