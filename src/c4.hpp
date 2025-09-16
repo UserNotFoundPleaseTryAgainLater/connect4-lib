@@ -12,7 +12,7 @@ namespace c4
         YELLOW
     };
 
-    void toBits(Board& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed);
+    void toBits(const Board& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed);
 
     class Board
     {
