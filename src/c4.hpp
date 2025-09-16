@@ -110,6 +110,7 @@ namespace c4
         
         bool isFourInRow()
         {
+            toBits(board, bitboardYellow, bitboardRed);
             return false; //placeholder
         }
     };
