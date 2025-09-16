@@ -1,2 +1,2 @@
 This is a connect 4 library 👍
-It is not the best atm so stay tuned
+It is not finished at the moment so stay tuned
