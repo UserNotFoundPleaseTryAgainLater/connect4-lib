@@ -231,12 +231,12 @@ namespace c4
         {
             for (int row = 0; row < 6; row++)
             {
-                if ((board[row][column])) == 1)
+                if ((board[row][column]) == 1)
                 {
                     int bitIndex = 6 * column + row;
                     bitsYellow.set(bitIndex);
                 }
-                else if ((board[row][column])) == -1)
+                else if ((board[row][column]) == -1)
                 {
                     int bitIndex = 6 * column + row;
                     bitsRed.set(bitIndex);
