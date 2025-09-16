@@ -42,6 +42,31 @@ namespace c4
             return true;
         }
 
+        bool isHorizontalFour() const
+        {
+            std::bitset<42> mask;
+            mask.set(0);
+            bool isRedHorizontal = false;
+            bool isYellowHorizontal = false;
+            bool temporary1 = false;
+            bool temporary2 = false;
+            bool temporary3 = false;
+            for (int row = 0; row < 6; row++)
+            {
+                for (int column = 0; column < 4)
+                {
+                    for (int x = 0; x <= 18; x += 6)
+                    {
+                        temporary1 = ((bitboardRed >> (6 + (6 * column + row))) & mask);
+                        isRedHorizontal = (isRedHorizontal && temporary1);
+                    }
+                    temporary2 = (temporary2 && temporary1);
+                }
+                temporary3 = (temporary3 && temporary2);
+            }
+
+        }
+
     public:
         Board() = default;
         
