@@ -1,5 +1,6 @@
 #include <iostream>
 #include <array>
+#include <bitset>
 #include "c4.hpp"
 int main()
 {
@@ -22,8 +23,13 @@ int main()
     board.show();
     moves.legalMoves(board);
     moves.show();
-    board.unmakeMove(4); //Remove top chip at column 4
-    board.show();
-    moves.legalMoves(board);
-    moves.show();
+    std::bitset<42> bitsYellow;
+    std::bitset<42> bitsRed;
+    c4::toBits(board, bitsYellow, bitsRed);
+    std::bitset<42> bits = bitsYellow | bitsRed;
+    for (int idx = 0; idx < 42; idx++)
+    {
+        std::cout << bits[idx];
+    }
+    std::cout << std::endl;
 }

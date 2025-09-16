@@ -11,7 +11,7 @@ namespace c4
         RED,
         YELLOW
     };
-
+    class Board;
     void toBits(const Board& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed);
 
     class Board
@@ -110,7 +110,7 @@ namespace c4
         
         bool isFourInRow()
         {
-            
+            return false; //placeholder
         }
     };
 
