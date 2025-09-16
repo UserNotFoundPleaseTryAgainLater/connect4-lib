@@ -33,14 +33,17 @@ namespace c4
                         for (int iRow = row - 1; iRow >= 0; --iRow)
                         {
                             if (pos[iRow][col] != 0)
-                            {
                                 return false; //disc floating above empty space
-                            }
                         }
                     }
                 }
             }
             return true;
+        }
+
+        void updateBitboards()
+        {
+            toBits(board, bitboardYellow, bitboardRed);
         }
 
     public:
@@ -49,12 +52,16 @@ namespace c4
         void clear()
         {
             board = {}; //resets everything to 0
+            updateBitboards();
         }
         
         void set(const std::array<std::array<short, 7>, 6>& newPos)
         {
             if (isValidPosition(newPos))
+            {
                 board = newPos;
+                updateBitboards();
+            }
         }
         
         void show() const
@@ -68,7 +75,7 @@ namespace c4
                         std::cout << "\033[1;91m\u25C9\033[0m ";
                     else if (board[row][column] == 1)
                         std::cout << "\033[1;93m\u25C9\033[0m ";
-                    else if (board[row][column] == 0)
+                    else
                         std::cout << "  ";
                 }
                 std::cout << std::endl;
@@ -77,47 +84,43 @@ namespace c4
         
         void makeMove(int column, Color color)
         {
-            if ((board[0][column - 1]) != 0) return;
-            if (!((column >= 1) && (column <= 7))) return;
-            int row = 0;
-            int boardRepresent = 0;
-            while (((board[row + 1][column - 1]) == 0) && (row < 5)) ++row;
-            switch (color)
-            {
-                case Color::RED:
-                    boardRepresent = -1;
-                    break;
-                case Color::YELLOW:
-                    boardRepresent = 1;
-                    break;
-            }
+            if (column < 1 || column > 7) return;
+            column--; 
+            if (board[0][column] != 0) return; 
 
-            board[row][column - 1] = boardRepresent;
+            int row = 0;
+            while (row < 5 && board[row + 1][column] == 0) ++row;
+
+            board[row][column] = (color == Color::RED) ? -1 : 1;
+            updateBitboards();
         }
 
         void unmakeMove(int column)
         {
-            if (!((column >= 1) && (column <= 7))) return;
-            if ((board[5][column - 1]) == 0) return;
+            if (column < 1 || column > 7) return;
+            column--;
             int row = 0;
-            while (((board[row][column - 1]) == 0) && (row < 5)) ++row;
-            board[row][column - 1] = 0;
+            while (row < 6 && board[row][column] != 0) ++row;
+            if (row == 0) return; // nothing to unmake
+            board[row - 1][column] = 0;
+            updateBitboards();
         }
 
         int getElement(int row, int column) const
         {
             return board[row][column];
         }
+
+        const std::bitset<42>& getBitboardYellow() const { return bitboardYellow; }
+        const std::bitset<42>& getBitboardRed() const { return bitboardRed; }
         
         bool isFourInRow(Color& winningColor)
         {
-            c4::toBits(this->board, bitboardYellow, bitboardRed);
-
             //Lambda to check horizontal 4-in-a-row
             auto horizontalCheck = [](const std::bitset<42>& bits) {
                 for (int row = 0; row < 6; ++row)
                 {
-                    for (int col = 0; col <= 3; ++col) //last starting column is 3
+                    for (int col = 0; col <= 3; ++col)
                     {
                         int idx0 = 6*col + row;
                         int idx1 = 6*(col+1) + row;
@@ -130,11 +133,10 @@ namespace c4
                 return false;
             };
 
-            //Lambda to check vertical 4-in-a-row
             auto verticalCheck = [](const std::bitset<42>& bits) {
                 for (int col = 0; col < 7; ++col)
                 {
-                    for (int row = 0; row <= 2; ++row) // last starting row is 2
+                    for (int row = 0; row <= 2; ++row)
                     {
                         int idx0 = 6*col + row;
                         int idx1 = 6*col + (row+1);
@@ -147,7 +149,6 @@ namespace c4
                 return false;
             };
 
-            //Lambda to check diagonal (bottom-left to top-right)
             auto diag1Check = [](const std::bitset<42>& bits) {
                 for (int col = 0; col <= 3; ++col)
                 {
@@ -164,7 +165,6 @@ namespace c4
                 return false;
             };
 
-            //Lambda to check diagonal (top-left to bottom-right)
             auto diag2Check = [](const std::bitset<42>& bits) {
                 for (int col = 0; col <= 3; ++col)
                 {
@@ -180,8 +180,14 @@ namespace c4
                 }
                 return false;
             };
-
-            //Check Yellow
+            if ((horizontalCheck(bitboardYellow) || verticalCheck(bitboardYellow) || 
+                diag1Check(bitboardYellow) || diag2Check(bitboardYellow)) && 
+                (horizontalCheck(bitboardRed) || verticalCheck(bitboardRed) ||
+                diag1Check(bitboardRed) || diag2Check(bitboardRed)))
+            {
+                winningColor = Color::NONE;
+                return false;
+            }
             if (horizontalCheck(bitboardYellow) || verticalCheck(bitboardYellow) ||
                 diag1Check(bitboardYellow) || diag2Check(bitboardYellow))
             {
@@ -189,7 +195,6 @@ namespace c4
                 return true;
             }
 
-            //Check Red
             if (horizontalCheck(bitboardRed) || verticalCheck(bitboardRed) ||
                 diag1Check(bitboardRed) || diag2Check(bitboardRed))
             {
@@ -200,7 +205,6 @@ namespace c4
             winningColor = Color::NONE;
             return false;
         }
-
     };
 
     class Movelist
@@ -213,36 +217,30 @@ namespace c4
             moves.clear();
             for (int column = 0; column < 7; ++column)
             {
-                if ((board.getElement(0, column)) == 0) moves.push_back(column + 1);
+                if (board.getElement(0, column) == 0)
+                    moves.push_back(column + 1);
             }
         }
         void show() const
         {
             for (const int move : moves)
-            {
                 std::cout << move << " ";
-            }
             std::cout << std::endl;
         }
     };
+
     void toBits(const std::array<std::array<short, 7>, 6>& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
     {
         bitsYellow.reset();
         bitsRed.reset();
-        for (int column = 0; column < 7; column++)
+        for (int col = 0; col < 7; ++col)
         {
-            for (int row = 0; row < 6; row++)
+            for (int row = 0; row < 6; ++row)
             {
-                if ((board[row][column]) == 1)
-                {
-                    int bitIndex = 6 * column + row;
-                    bitsYellow.set(bitIndex);
-                }
-                else if ((board[row][column]) == -1)
-                {
-                    int bitIndex = 6 * column + row;
-                    bitsRed.set(bitIndex);
-                }
+                if (board[row][col] == 1)
+                    bitsYellow.set(6*col + row);
+                else if (board[row][col] == -1)
+                    bitsRed.set(6*col + row);
             }
         }
     }

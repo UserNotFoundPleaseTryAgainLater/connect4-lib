@@ -1,52 +1,55 @@
+#include "c4.hpp"
 #include <iostream>
-#include <array>
 #include <bitset>
 #include <string>
-#include "c4.hpp"
+
 int main()
 {
     c4::Board board;
-    std::array<std::array<short, 7>, 6> pos =
-    {{
-        {1,0,0,0,0,0,0},
-        {1,0,0,0,0,0,0},
-        {1,0,0,0,0,0,0},
-        {1,0,0,0,0,0,0},
-        {-1,1,1,0,1,-1,0},
-        {1,-1,1,0,1,1,-1}
+
+    std::array<std::array<short,7>,6> pos = {{
+        {0,0,0,0,0,0,0},
+        {1,0,0,-1,0,0,0},
+        {1,0,-1,1,0,0,0},
+        {1,-1,-1,1,0,0,0},
+        {-1,1,1,-1,1,-1,0},
+        {1,-1,1,1,-1,1,-1}
     }};
+
     board.set(pos);
     board.show();
+
     c4::Movelist moves;
     moves.legalMoves(board);
     moves.show();
-    board.makeMove(4, c4::Color::RED); //Drop red chip at column 4
+
+    board.makeMove(4, c4::Color::RED);
     board.show();
+
     moves.legalMoves(board);
-    move.show();
-    std::bitset<42> bitsYellow;
-    std::bitset<42> bitsRed;
-    c4::toBits(board, bitsYellow, bitsRed);
+    moves.show();
+
+    std::bitset<42> bitsYellow = board.getBitboardYellow();
+    std::bitset<42> bitsRed = board.getBitboardRed();
     std::bitset<42> bits = bitsYellow | bitsRed;
-    for (int idx = 0; idx < 42; idx++)
+
+    for (int i=0;i<42;i++) std::cout << bits[i];
+    std::cout << "\n";
+
+    c4::Color winner;
+    if (board.isFourInRow(winner))
     {
-        std::cout << bits[idx];
+        std::string winColor;
+        switch(winner)
+        {
+            case c4::Color::NONE:   winColor="None"; break;
+            case c4::Color::RED:    winColor="Red"; break;
+            case c4::Color::YELLOW: winColor="Yellow"; break;
+        }
+        std::cout << "Winner: " << winColor << "\n";
     }
-    std::cout << std::endl;
-    c4::Color winningColor = c4::Color::NONE;
-    board.isFourInRow(winningColor);
-    std::string winColor;
-    switch (winningColor)
+    else
     {
-        case NONE:
-            winColor = "None";
-            break;
-        case YELLOW:
-            winColor = "Yellow";
-            break;
-        case RED:
-            winColor = "Red";
-            break;
+        std::cout << "No winner yet\n";
     }
-    std::cout << winColor << std::endl;
 }
