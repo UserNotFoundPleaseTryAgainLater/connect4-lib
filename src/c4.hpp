@@ -227,6 +227,8 @@ namespace c4
     };
     void toBits(const std::array<std::array<short, 7>, 6>& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
     {
+        bitsYellow.reset();
+        bitsRed.reset();
         for (int column = 0; column < 7; column++)
         {
             for (int row = 0; row < 6; row++)
