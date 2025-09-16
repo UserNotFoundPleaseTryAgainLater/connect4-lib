@@ -1,6 +1,7 @@
 #include <iostream>
 #include <array>
 #include <bitset>
+#include <string>
 #include "c4.hpp"
 int main()
 {
@@ -9,7 +10,7 @@ int main()
     {{
         {1,0,0,0,0,0,0},
         {1,0,0,0,0,0,0},
-        {-1,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0},
         {1,0,0,0,0,0,0},
         {-1,1,1,0,1,-1,0},
         {1,-1,1,0,1,1,-1}
@@ -22,7 +23,7 @@ int main()
     board.makeMove(4, c4::Color::RED); //Drop red chip at column 4
     board.show();
     moves.legalMoves(board);
-    moves.show();
+    move.show();
     std::bitset<42> bitsYellow;
     std::bitset<42> bitsRed;
     c4::toBits(board, bitsYellow, bitsRed);
@@ -32,4 +33,20 @@ int main()
         std::cout << bits[idx];
     }
     std::cout << std::endl;
+    c4::Color winningColor = c4::Color::NONE;
+    board.isFourInRow(winningColor);
+    std::string winColor;
+    switch (winningColor)
+    {
+        case NONE:
+            winColor = "None";
+            break;
+        case YELLOW:
+            winColor = "Yellow";
+            break;
+        case RED:
+            winColor = "Red";
+            break;
+    }
+    std::cout << winColor << std::endl;
 }
