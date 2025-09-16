@@ -111,7 +111,7 @@ namespace c4
         
         bool isFourInRow(Color& winningColor)
         {
-            toBits(board, bitboardYellow, bitboardRed);
+            c4::toBits(this->board, bitboardYellow, bitboardRed);
 
             //Lambda to check horizontal 4-in-a-row
             auto horizontalCheck = [](const std::bitset<42>& bits) {
