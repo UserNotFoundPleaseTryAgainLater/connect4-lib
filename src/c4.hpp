@@ -12,8 +12,8 @@ namespace c4
         RED,
         YELLOW
     };
-    class Board;
-    void toBits(const Board& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed);
+    
+    void toBits(const std::array<std::array<short, 7>, 6>& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed);
 
     class Board
     {
@@ -34,7 +34,7 @@ namespace c4
                         {
                             if (pos[iRow][col] != 0)
                             {
-                                return false; // disc floating above empty space
+                                return false; //disc floating above empty space
                             }
                         }
                     }
@@ -43,35 +43,12 @@ namespace c4
             return true;
         }
 
-        void isHorizontalFour(std::bitset<42>& bits, bool& isHorizontal = false)
-        {
-            std::bitset<42> mask;
-            mask.set(0);
-            bool temporary1 = false;
-            bool temporary2 = false;
-            bool temporary3 = false;
-            for (int row = 0; row < 6; row++)
-            {
-                for (int column = 0; column < 4)
-                {
-                    for (int x = 0; x <= 18; x += 6)
-                    {
-                        temporary1 = ((bits >> (6 + (6 * column + row))) & mask);
-                        temporary2 = (temporary2 && temporary1);
-                    }
-                    temporary3 = (temporary3 && temporary2);
-                }
-                isHorizontal = (isHorizontal && temporary3);
-            }
-
-        }
-
     public:
         Board() = default;
         
         void clear()
         {
-            board = {}; // resets everything to 0
+            board = {}; //resets everything to 0
         }
         
         void set(const std::array<std::array<short, 7>, 6>& newPos)
@@ -135,12 +112,95 @@ namespace c4
         bool isFourInRow(Color& winningColor)
         {
             toBits(board, bitboardYellow, bitboardRed);
-            bool isFourYellow = false;
-            bool isFourRed = false;
-            isHorizontalFour(bitboardYellow, isFourYellow);
-            isHorizontalFour(bitboardRed, isFourRed);
-            return false; //placeholder
+
+            //Lambda to check horizontal 4-in-a-row
+            auto horizontalCheck = [](const std::bitset<42>& bits) {
+                for (int row = 0; row < 6; ++row)
+                {
+                    for (int col = 0; col <= 3; ++col) //last starting column is 3
+                    {
+                        int idx0 = 6*col + row;
+                        int idx1 = 6*(col+1) + row;
+                        int idx2 = 6*(col+2) + row;
+                        int idx3 = 6*(col+3) + row;
+                        if (bits[idx0] && bits[idx1] && bits[idx2] && bits[idx3])
+                            return true;
+                    }
+                }
+                return false;
+            };
+
+            //Lambda to check vertical 4-in-a-row
+            auto verticalCheck = [](const std::bitset<42>& bits) {
+                for (int col = 0; col < 7; ++col)
+                {
+                    for (int row = 0; row <= 2; ++row) // last starting row is 2
+                    {
+                        int idx0 = 6*col + row;
+                        int idx1 = 6*col + (row+1);
+                        int idx2 = 6*col + (row+2);
+                        int idx3 = 6*col + (row+3);
+                        if (bits[idx0] && bits[idx1] && bits[idx2] && bits[idx3])
+                            return true;
+                    }
+                }
+                return false;
+            };
+
+            //Lambda to check diagonal (bottom-left to top-right)
+            auto diag1Check = [](const std::bitset<42>& bits) {
+                for (int col = 0; col <= 3; ++col)
+                {
+                    for (int row = 0; row <= 2; ++row)
+                    {
+                        int idx0 = 6*col + row;
+                        int idx1 = 6*(col+1) + (row+1);
+                        int idx2 = 6*(col+2) + (row+2);
+                        int idx3 = 6*(col+3) + (row+3);
+                        if (bits[idx0] && bits[idx1] && bits[idx2] && bits[idx3])
+                            return true;
+                    }
+                }
+                return false;
+            };
+
+            //Lambda to check diagonal (top-left to bottom-right)
+            auto diag2Check = [](const std::bitset<42>& bits) {
+                for (int col = 0; col <= 3; ++col)
+                {
+                    for (int row = 3; row < 6; ++row)
+                    {
+                        int idx0 = 6*col + row;
+                        int idx1 = 6*(col+1) + (row-1);
+                        int idx2 = 6*(col+2) + (row-2);
+                        int idx3 = 6*(col+3) + (row-3);
+                        if (bits[idx0] && bits[idx1] && bits[idx2] && bits[idx3])
+                            return true;
+                    }
+                }
+                return false;
+            };
+
+            //Check Yellow
+            if (horizontalCheck(bitboardYellow) || verticalCheck(bitboardYellow) ||
+                diag1Check(bitboardYellow) || diag2Check(bitboardYellow))
+            {
+                winningColor = Color::YELLOW;
+                return true;
+            }
+
+            //Check Red
+            if (horizontalCheck(bitboardRed) || verticalCheck(bitboardRed) ||
+                diag1Check(bitboardRed) || diag2Check(bitboardRed))
+            {
+                winningColor = Color::RED;
+                return true;
+            }
+
+            winningColor = Color::NONE;
+            return false;
         }
+
     };
 
     class Movelist
@@ -165,7 +225,7 @@ namespace c4
             std::cout << std::endl;
         }
     };
-    void toBits(const Board& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
+    void toBits(const std::array<std::array<short, 7>, 6>& board, std::bitset<42>& bitsYellow, std::bitset<42>& bitsRed)
     {
         for (int column = 0; column < 7; column++)
         {
