@@ -8,6 +8,7 @@ namespace c4
 {
     enum class Color
     {
+        NONE,
         RED,
         YELLOW
     };
@@ -42,12 +43,10 @@ namespace c4
             return true;
         }
 
-        bool isHorizontalFour() const
+        void isHorizontalFour(std::bitset<42>& bits, bool& isHorizontal = false)
         {
             std::bitset<42> mask;
             mask.set(0);
-            bool isRedHorizontal = false;
-            bool isYellowHorizontal = false;
             bool temporary1 = false;
             bool temporary2 = false;
             bool temporary3 = false;
@@ -57,12 +56,12 @@ namespace c4
                 {
                     for (int x = 0; x <= 18; x += 6)
                     {
-                        temporary1 = ((bitboardRed >> (6 + (6 * column + row))) & mask);
-                        isRedHorizontal = (isRedHorizontal && temporary1);
+                        temporary1 = ((bits >> (6 + (6 * column + row))) & mask);
+                        temporary2 = (temporary2 && temporary1);
                     }
-                    temporary2 = (temporary2 && temporary1);
+                    temporary3 = (temporary3 && temporary2);
                 }
-                temporary3 = (temporary3 && temporary2);
+                isHorizontal = (isHorizontal && temporary3);
             }
 
         }
@@ -133,9 +132,13 @@ namespace c4
             return board[row][column];
         }
         
-        bool isFourInRow()
+        bool isFourInRow(Color& winningColor)
         {
             toBits(board, bitboardYellow, bitboardRed);
+            bool isFourYellow = false;
+            bool isFourRed = false;
+            isHorizontalFour(bitboardYellow, isFourYellow);
+            isHorizontalFour(bitboardRed, isFourRed);
             return false; //placeholder
         }
     };
