@@ -205,6 +205,23 @@ namespace c4
             winningColor = Color::NONE;
             return false;
         }
+
+        bool isDraw()
+        {
+            Color null;
+            if (!isFourInRow(null) &&
+                ((board[0][0] != 0) &&
+                (board[0][1] != 0) &&
+                (board[0][2] != 0) &&
+                (board[0][3] != 0) &&
+                (board[0][4] != 0) &&
+                (board[0][5] != 0) &&
+                (board[0][6] != 0)))
+            {
+                return true;
+            }
+            return false;
+        }
     };
 
     class Movelist
