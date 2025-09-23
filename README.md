@@ -1,2 +1,3 @@
-This is a connect 4 library 👍
-It is not finished at the moment so stay tuned
+#Connect4 Library
+-Can handle game elements of Connect4
+-Includes win and draw detection, legal move generation, move making, and board manipulation.
