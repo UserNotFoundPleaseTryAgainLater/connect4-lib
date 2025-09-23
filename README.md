@@ -5,3 +5,6 @@
 
 # Installation
 Run:
+```powershell
+git clone https://github.com/UserNotFoundPleaseTryAgainLater/connect4-lib <your root directory containing your code>
+```
